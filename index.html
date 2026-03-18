@@ -231,9 +231,6 @@
         h3,
         h4,
         h5,
-        h6 {
-            font-family: Pacifico, Inter, system-ui, sans-serif;
-        }
 
         body {
             font-family: Nunito, Inter, system-ui, sans-serif;
@@ -2606,79 +2603,207 @@
             }
         }
     </style>
+    <style id="final-touches-style">
+        @keyframes softRise {
+            0% {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 600ms ease, transform 600ms ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .finale-heading {
+            animation: softRise 800ms ease both;
+        }
+
+        .wishes-title {
+            font-family: Nunito, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            letter-spacing: 0.01em;
+            text-wrap: balance;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        }
+
+        @keyframes spotifySmash {
+            0% {
+                transform: translateX(0) scale(1) rotate(0deg);
+                filter: brightness(1);
+            }
+
+            20% {
+                transform: translateX(-10px) scale(1.01) rotate(-1deg);
+            }
+
+            40% {
+                transform: translateX(10px) scale(1.01) rotate(1deg);
+            }
+
+            60% {
+                transform: translateX(-8px) scale(1) rotate(-0.5deg);
+            }
+
+            80% {
+                transform: translateX(6px) scale(0.98) rotate(0.5deg);
+            }
+
+            100% {
+                transform: translateX(0) scale(0.96) rotate(0deg);
+                filter: grayscale(1) contrast(1.2) brightness(0.6);
+            }
+        }
+
+        @keyframes crackFlash {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            30% {
+                opacity: 0.9;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+        }
+
+        .spotify-smash-wrap {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spotify-crack {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            background-image: none;
+            mix-blend-mode: screen;
+        }
+
+        .spotify-smash-wrap.smashed img {
+            animation: spotifySmash 700ms ease forwards;
+        }
+
+        .spotify-smash-wrap.smashed .spotify-crack {
+            animation: crackFlash 550ms ease forwards;
+        }
+    </style>
 </head>
 
 <body class="antialiased text-gray-800 min-h-screen flex flex-col">
     <script>
         function checkBirthday() {
-            const birthdayDate = new Date('April 1, 2025 00:00:00').getTime();
+            const birthdayDate = new Date('April 2, 2026 00:00:00').getTime();
             const now = new Date().getTime();
             const mainContent = document.getElementById('RolloutPageContent');
-            
+
             // Only proceed if mainContent exists
             if (!mainContent) return;
-    
+
             const preloader = document.createElement('div');
-    
+
             // Create and style preloader with countdown
             preloader.innerHTML = `
                 <section class="min-h-screen bg-gradient-to-br from-pink-200 to-purple-300 dark:from-neutral-800 dark:to-neutral-900 flex items-center justify-center">
                     <div class="container mx-auto px-4 py-8">
-                        <div class="max-w-2xl mx-auto">
-                            <div class="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl text-center">
-                                <h2 class="text-2xl md:text-3xl font-bold text-pink-600 dark:text-pink-400 mb-8">
+                        <div class="max-w-4xl mx-auto">
+                            <div class="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
+                                <h2 class="text-2xl md:text-3xl font-bold text-pink-600 dark:text-pink-400 mb-8 text-center">
                                     Countdown
                                 </h2>
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                                    <div class="flex flex-col items-center p-4 bg-gradient-to-br from-pink-500 to-pink-600 dark:from-pink-600 dark:to-pink-700 rounded-xl text-white">
-                                        <div id="preview-days" class="text-3xl md:text-5xl font-bold mb-1">00</div>
-                                        <div class="text-sm md:text-base font-medium opacity-90">Days</div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                    <!-- Image Section -->
+                                    <div class="flex flex-col items-center">
+                                        <div id="preview-spotify-smash-target" class="spotify-smash-wrap w-full max-w-sm mb-4">
+                                            <img class="w-full rounded-lg shadow-lg" src="./img/me.jpg" alt="Spotify memory image">
+                                            <div id="preview-spotify-crack" class="spotify-crack"></div>
+                                        </div>
+                                        <button id="preview-smash-spotify-btn" class="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95">
+                                            Smash Me!
+                                        </button>
                                     </div>
-                                    <div class="flex flex-col items-center p-4 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 rounded-xl text-white">
-                                        <div id="preview-hours" class="text-3xl md:text-5xl font-bold mb-1">00</div>
-                                        <div class="text-sm md:text-base font-medium opacity-90">Hours</div>
-                                    </div>
-                                    <div class="flex flex-col items-center p-4 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl text-white">
-                                        <div id="preview-minutes" class="text-3xl md:text-5xl font-bold mb-1">00</div>
-                                        <div class="text-sm md:text-base font-medium opacity-90">Minutes</div>
-                                    </div>
-                                    <div class="flex flex-col items-center p-4 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-600 dark:to-indigo-700 rounded-xl text-white">
-                                        <div id="preview-seconds" class="text-3xl md:text-5xl font-bold mb-1">00</div>
-                                        <div class="text-sm md:text-base font-medium opacity-90">Seconds</div>
+                                    
+                                    <!-- Countdown Section -->
+                                    <div class="text-center">
+                                        <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                                            <div class="flex flex-col items-center p-4 bg-gradient-to-br from-pink-500 to-pink-600 dark:from-pink-600 dark:to-pink-700 rounded-xl text-white">
+                                                <div id="preview-days" class="text-3xl md:text-4xl font-bold mb-1">00</div>
+                                                <div class="text-sm font-medium opacity-90">Days</div>
+                                            </div>
+                                            <div class="flex flex-col items-center p-4 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 rounded-xl text-white">
+                                                <div id="preview-hours" class="text-3xl md:text-4xl font-bold mb-1">00</div>
+                                                <div class="text-sm font-medium opacity-90">Hours</div>
+                                            </div>
+                                            <div class="flex flex-col items-center p-4 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl text-white">
+                                                <div id="preview-minutes" class="text-3xl md:text-4xl font-bold mb-1">00</div>
+                                                <div class="text-sm font-medium opacity-90">Minutes</div>
+                                            </div>
+                                            <div class="flex flex-col items-center p-4 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-600 dark:to-indigo-700 rounded-xl text-white">
+                                                <div id="preview-seconds" class="text-3xl md:text-4xl font-bold mb-1">00</div>
+                                                <div class="text-sm font-medium opacity-90">Seconds</div>
+                                            </div>
+                                        </div>
+                                        <p class="mt-8 text-gray-600 dark:text-gray-300">
+                                            Until I reveal Your Highness's surprise 👑
+                                            <br>
+                                            Till then Smash me to Ease out your gussa!
+                                        </p>
                                     </div>
                                 </div>
-                                <p class="mt-8 text-gray-600 dark:text-gray-300">
-                                    Until I reveal Your Highness's surprise 👑
-                                </p>
                             </div>
                         </div>
                     </div>
                 </section>
             `;
-    
+
             // Hide main content and show preloader before birthday
             if (now < birthdayDate) {
                 // Hide main content
+
                 mainContent.style.display = 'none';
-                
+
                 // Insert preloader at the start of body
                 document.body.insertBefore(preloader, document.body.firstChild);
-    
+
                 // Update countdown
                 function updatePreviewCountdown() {
                     const now = new Date().getTime();
                     const timeLeft = birthdayDate - now;
-    
+
                     const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-    
+
                     document.getElementById('preview-days').innerText = days < 10 ? '0' + days : days;
                     document.getElementById('preview-hours').innerText = hours < 10 ? '0' + hours : hours;
                     document.getElementById('preview-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
                     document.getElementById('preview-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
-    
+
                     // Show main content when birthday arrives
                     if (timeLeft <= 0) {
                         preloader.remove();
@@ -2686,12 +2811,44 @@
                         clearInterval(countdownInterval);
                     }
                 }
-    
+
+                // Setup smash button for preloader
+                const previewSmashBtn = preloader.querySelector('#preview-smash-spotify-btn');
+                const previewSmashTarget = preloader.querySelector('#preview-spotify-smash-target');
+                const previewSpotifyCrack = preloader.querySelector('#preview-spotify-crack');
+                let previewSmashCount = 0;
+
+                function buildCrackBackground(lineCount) {
+                    const layers = [];
+                    for (let i = 0; i < lineCount; i++) {
+                        const angle = Math.floor(Math.random() * 180);
+                        const pivot = 24 + Math.random() * 52;
+                        const width = 0.5 + Math.random() * 1.6;
+                        const alpha = (0.45 + Math.random() * 0.45).toFixed(2);
+                        layers.push(`linear-gradient(${angle}deg, transparent 0%, transparent ${pivot}%, rgba(255, 255, 255, ${alpha}) ${pivot + 0.2}%, transparent ${pivot + width}%)`);
+                    }
+                    return layers.join(',');
+                }
+
+                if (previewSmashBtn && previewSmashTarget && previewSpotifyCrack) {
+                    previewSmashBtn.addEventListener('click', function () {
+                        previewSmashCount += 1;
+                        const lineCount = 4 + previewSmashCount;
+                        previewSpotifyCrack.style.backgroundImage = buildCrackBackground(lineCount);
+                        
+                        previewSmashTarget.classList.remove('smashed');
+                        void previewSmashTarget.offsetWidth;
+                        previewSmashTarget.classList.add('smashed');
+                        
+                        this.textContent = `Smash More! (${previewSmashCount})`;
+                    });
+                }
+
                 const countdownInterval = setInterval(updatePreviewCountdown, 1000);
                 updatePreviewCountdown();
             }
         }
-    
+
         // Run the check when DOM is fully loaded
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', checkBirthday);
@@ -2704,14 +2861,14 @@
         Skip to main content
     </a>
 
-    <main id="main-content" class="flex-1 relative h-full">
+    <main id="main-content" class="bg-black flex-1 relative h-full">
         <div id="RolloutPageContent">
             <element id="dbeee409-2d25-4e4a-b87a-471624cd6186" data-section-id="dbeee409-2d25-4e4a-b87a-471624cd6186">
 
 
-                <div id="root">
-                    <section id="hero"
-                        class="relative min-h-screen pt-20 bg-gradient-to-br from-pink-200 to-purple-300 dark:from-neutral-800 dark:to-neutral-900 overflow-hidden">
+                <div id="root" class="bg-black">
+                    <section id="hero" data-reveal
+                        class="relative mb-4 min-h-screen pt-20 bg-gradient-to-br from-pink-200 to-purple-300 dark:from-neutral-800 dark:to-neutral-900 overflow-hidden">
                         <!-- Background pattern decoration -->
                         <div class="absolute inset-0 opacity-20">
                             <div class="absolute -top-8 -left-8 w-32 h-32 rounded-full bg-pink-400 dark:bg-pink-600">
@@ -2758,7 +2915,7 @@
                         <div
                             class="container mx-auto px-4 py-8 md:py-8 flex flex-col items-center justify-center relative z-10">
                             <!-- Main content -->
-                            <div class="text-center mb-12">
+                            <div class="text-center">
                                 <h1
                                     class="text-4xl md:text-6xl font-bold text-pink-700 dark:text-pink-400 mb-4 tracking-tight leading-tight">
                                     Happy Birthday <span class="text-purple-700 dark:text-purple-400">Your
@@ -2766,96 +2923,59 @@
                                 </h1>
                                 <p class="text-xl md:text-2xl text-gray-800 dark:text-gray-200 my-8">
                                     A special day for someone incredibly special - My <span
-                                        class="text-pink-600 dark:text-pink-400">Darling</span> 💕
+                                        class="text-pink-600 dark:text-pink-400">Malkin</span> 💕
                                 </p>
-
-                                <!-- Birthday messages -->
-                                <div class="max-w-3xl mx-auto mb-0">
-                                    <p class="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic">
-                                        "To my MadamJI, my Jaana, my Babygirl, my Babydoll - may your special day be as
-                                        amazing as you are!"
-                                    </p>
-                                </div>
                             </div>
 
                         </div>
 
-                        <!-- Decorative elements - Floating hearts -->
-                        <div class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-                            <div class="animate-float-slow absolute top-10 left-10">
-                                <div class="text-pink-500 dark:text-pink-400 opacity-50">❤️</div>
-                            </div>
-                            <div class="animate-float-medium absolute top-20 right-20">
-                                <div class="text-pink-500 dark:text-pink-400 opacity-50">❤️</div>
-                            </div>
-                            <div class="animate-float-fast absolute bottom-32 left-1/4">
-                                <div class="text-pink-500 dark:text-pink-400 opacity-50">❤️</div>
-                            </div>
-                            <div class="animate-float-medium absolute top-1/3 right-1/4">
-                                <div class="text-pink-500 dark:text-pink-400 opacity-50">❤️</div>
-                            </div>
-                        </div>
                         <div class="container mx-auto">
-                            <div class="max-w-6xl mx-auto">
-                                <div class="flex flex-col items-center gap-12">
-                                    <div class="w-full lg:w-1/2 order-2 lg:order-1">
+                            <div class="max-w-4xl mx-auto">
+                                <div class="relative">
+                                    <!-- Decorative elements -->
+                                    <div class="absolute -top-6 -left-6 text-5xl z-50">🎀</div>
+                                    <div class="absolute -bottom-6 -right-6 text-5xl z-50">🎀</div>
 
-                                        <!-- Countdown Timer -->
-                                        <div
-                                            class="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                                                <div
-                                                    class="flex flex-col items-center p-4 bg-gradient-to-br from-pink-500 to-pink-600 dark:from-pink-600 dark:to-pink-700 rounded-xl text-white">
-                                                    <div id="days" class="text-3xl md:text-5xl font-bold mb-1">00</div>
-                                                    <div class="text-sm md:text-base font-medium opacity-90">Days</div>
-                                                </div>
-
-                                                <div
-                                                    class="flex flex-col items-center p-4 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 rounded-xl text-white">
-                                                    <div id="hours" class="text-3xl md:text-5xl font-bold mb-1">00</div>
-                                                    <div class="text-sm md:text-base font-medium opacity-90">Hours</div>
-                                                </div>
-
-                                                <div
-                                                    class="flex flex-col items-center p-4 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl text-white">
-                                                    <div id="minutes" class="text-3xl md:text-5xl font-bold mb-1">00
-                                                    </div>
-                                                    <div class="text-sm md:text-base font-medium opacity-90">Minutes
-                                                    </div>
-                                                </div>
-
-                                                <div
-                                                    class="flex flex-col items-center p-4 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-600 dark:to-indigo-700 rounded-xl text-white">
-                                                    <div id="seconds" class="text-3xl md:text-5xl font-bold mb-1">00
-                                                    </div>
-                                                    <div class="text-sm md:text-base font-medium opacity-90">Seconds
-                                                    </div>
+                                    <div
+                                        class="min-h-80 bg-[url(./img/iamdead.png)] bg-cover bg-center backdrop-blur-sm p-8 md:p-10 shadow-xl border border-pink-200 dark:border-pink-900 rounded-2xl z-10">
+                                        <div class="text-center">
+                                            <div class="w-full flex justify-center items-center relative bottom-4">
+                                                <div class="text-xs text-white bg-black/50 px-2 py-1 rounded">
+                                                    Photo From My Heart
                                                 </div>
                                             </div>
-
-                                            <div class="mt-8 text-center">
-                                                <p id="birthday-message"
-                                                    class="text-xl text-pink-600 dark:text-pink-400 font-semibold animate-pulse">
-                                                    Happy Birthday, Your Highness! 🎂</p>
-                                                <p id="countdown-message"
-                                                    class="text-gray-700 dark:text-gray-300 hidden">Until we celebrate
-                                                    MadamJI's special day</p>
+                                            <div
+                                                class="absolute bottom-4 left-4 text-pink-600 dark:text-pink-400 font-semibold text-xl">
+                                                Forever yours ❤️
                                             </div>
-                                        </div>
-
-                                        <div class="mt-8 text-center lg:text-left">
-                                            <p class="text-gray-600 dark:text-gray-400 italic">"The best is yet to come,
-                                                Jaana. Can't wait to celebrate your special day!"</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <p class="mt-4 mb-4 text-gray-700 dark:text-gray-300 max-w-3xl mx-auto text-center text-lg md:text-xl italic">
+                                I know there’s silence between us now,
+                                and maybe I’m the reason for it… I’m sorry.
+                                Still, in every quiet moment, I find myself wishing you happiness—
+                                because even if you don’t speak to me, I miss you every minute.
+                            </p>
                         </div>
                     </section>
 
                     <script>
                         // Countdown timer functionality
                         function updateCountdown() {
+                            const daysEl = document.getElementById('days');
+                            const hoursEl = document.getElementById('hours');
+                            const minutesEl = document.getElementById('minutes');
+                            const secondsEl = document.getElementById('seconds');
+                            const countdownMessageEl = document.getElementById('countdown-message');
+                            const birthdayMessageEl = document.getElementById('birthday-message');
+
+                            // This page version may not include legacy countdown elements.
+                            if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+                                return;
+                            }
+
                             // Set birthday date - April 1st
                             const birthdayDate = new Date('April 1, 2025 00:00:00').getTime();
                             const now = new Date().getTime();
@@ -2867,204 +2987,51 @@
                             const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
                             // Update the countdown elements
-                            document.getElementById('days').innerText = days < 10 ? '0' + days : days;
-                            document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
-                            document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
-                            document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+                            daysEl.innerText = days < 10 ? '0' + days : days;
+                            hoursEl.innerText = hours < 10 ? '0' + hours : hours;
+                            minutesEl.innerText = minutes < 10 ? '0' + minutes : minutes;
+                            secondsEl.innerText = seconds < 10 ? '0' + seconds : seconds;
 
                             // If birthday has arrived
                             if (timeLeft < 0) {
-                                document.getElementById('days').innerText = '00';
-                                document.getElementById('hours').innerText = '00';
-                                document.getElementById('minutes').innerText = '00';
-                                document.getElementById('seconds').innerText = '00';
+                                daysEl.innerText = '00';
+                                hoursEl.innerText = '00';
+                                minutesEl.innerText = '00';
+                                secondsEl.innerText = '00';
 
-                                document.getElementById('countdown-message').classList.add('hidden');
-                                document.getElementById('birthday-message').classList.remove('hidden');
+                                if (countdownMessageEl) countdownMessageEl.classList.add('hidden');
+                                if (birthdayMessageEl) birthdayMessageEl.classList.remove('hidden');
                             }
                         }
 
-                        // Update the countdown every second
-                        setInterval(updateCountdown, 1000);
-
                         // Initial call to display the countdown immediately
                         updateCountdown();
+
+                        // Update the countdown every second only when target elements exist
+                        if (document.getElementById('days')) {
+                            setInterval(updateCountdown, 1000);
+                        }
                     </script>
-                </div>
 
-            </element>
-            <element id="ec93a29c-419e-43d6-adcf-6c183acf3509" data-section-id="ec93a29c-419e-43d6-adcf-6c183acf3509">
-
-
-                <div id="root">
-                    <section id="wishes"
-                        class="py-20 bg-gradient-to-br from-pink-50 to-purple-100 dark:from-neutral-900 dark:to-neutral-800">
-                        <div class="container mx-auto px-4">
+                    <section id="wishes" data-reveal
+                        class="md:h-[100vh] py-20 bg-gradient-to-br from-pink-50 to-purple-100 dark:from-neutral-900 dark:to-neutral-800 relative overflow-hidden">
+                        <div class="absolute inset-0 w-full h-full">
+                            <img class="w-[100%] h-[100%] object-cover" src="./img/collage.png" alt="Birthday collage">
+                        </div>
+                        <div class="absolute inset-0 bg-black/35 md:bg-black/20"></div>
+                        <div class="container mx-auto px-4 relative z-10">
                             <!-- Section Header -->
                             <div class="text-center mb-16">
                                 <h2
-                                    class="text-3xl md:text-4xl lg:text-5xl font-bold text-pink-600 dark:text-pink-400 mb-4">
-                                    Birthday Wishes for My Babydoll
+                                    class="wishes-title text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 px-2">
+                                    Birthday Wishes for My Malkin
                                 </h2>
-                                <p class="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-                                    A collection of heartfelt wishes for the most special person in my life. Each wish
-                                    represents how much you mean to me, Jaana.
-                                </p>
-                            </div>
-
-                            <!-- Wishes Cards Container -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                                <!-- Wish Card 1 -->
-                                <div
-                                    class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                                    <div class="p-6">
-                                        <div class="text-pink-500 dark:text-pink-400 text-4xl mb-4">💖</div>
-                                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">To My Darling
-                                        </h3>
-                                        <p class="text-gray-600 dark:text-gray-300">
-                                            May your birthday be as beautiful as your smile, as warm as your heart, and
-                                            as wonderful as you are to me every day.
-                                        </p>
-                                    </div>
-                                    <div class="bg-pink-100 dark:bg-pink-900/30 px-6 py-4">
-                                        <p class="text-pink-700 dark:text-pink-300 text-sm font-medium">
-                                            With all my love ❤️
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Wish Card 2 -->
-                                <div
-                                    class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                                    <div class="p-6">
-                                        <div class="text-purple-500 dark:text-purple-400 text-4xl mb-4">👑</div>
-                                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">To Your
-                                            Highness</h3>
-                                        <p class="text-gray-600 dark:text-gray-300">
-                                            On your special day, I bow to your majesty. May your reign be filled with
-                                            joy, laughter, and endless happiness.
-                                        </p>
-                                    </div>
-                                    <div class="bg-purple-100 dark:bg-purple-900/30 px-6 py-4">
-                                        <p class="text-purple-700 dark:text-purple-300 text-sm font-medium">
-                                            Your loyal admirer 👑
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Wish Card 3 -->
-                                <div
-                                    class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                                    <div class="p-6">
-                                        <div class="text-blue-500 dark:text-blue-400 text-4xl mb-4">✨</div>
-                                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">To MadamJI</h3>
-                                        <p class="text-gray-600 dark:text-gray-300">
-                                            Wishing you a day filled with everything that brings you joy. Your presence
-                                            lights up my world.
-                                        </p>
-                                    </div>
-                                    <div class="bg-blue-100 dark:bg-blue-900/30 px-6 py-4">
-                                        <p class="text-blue-700 dark:text-blue-300 text-sm font-medium">
-                                            With utmost respect ✨
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Wish Card 4 -->
-                                <div
-                                    class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                                    <div class="p-6">
-                                        <div class="text-yellow-500 dark:text-yellow-400 text-4xl mb-4">🌟</div>
-                                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">To My Jaana
-                                        </h3>
-                                        <p class="text-gray-600 dark:text-gray-300">
-                                            Happy Birthday to the one who makes my heart skip a beat. May this year
-                                            bring you countless reasons to smile.
-                                        </p>
-                                    </div>
-                                    <div class="bg-yellow-100 dark:bg-yellow-900/30 px-6 py-4">
-                                        <p class="text-yellow-700 dark:text-yellow-300 text-sm font-medium">
-                                            Forever yours 🌟
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Wish Card 5 -->
-                                <div
-                                    class="bg-white dark:bg-neutral-800 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
-                                    <div class="p-6">
-                                        <div class="text-red-500 dark:text-red-400 text-4xl mb-4">❣️</div>
-                                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">To My Babygirl
-                                        </h3>
-                                        <p class="text-gray-600 dark:text-gray-300">
-                                            Happy Birthday to the one who makes every day worth celebrating. You deserve
-                                            all the happiness in the world.
-                                        </p>
-                                    </div>
-                                    <div class="bg-red-100 dark:bg-red-900/30 px-6 py-4">
-                                        <p class="text-red-700 dark:text-red-300 text-sm font-medium">
-                                            Cherishing you always ❣️
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Special Message Box -->
-                            <div class="mt-16 max-w-4xl mx-auto">
-                                <div class="relative">
-                                    <!-- Decorative elements -->
-                                    <div class="absolute -top-6 -left-6 text-5xl">🎀</div>
-                                    <div class="absolute -bottom-6 -right-6 text-5xl">🎀</div>
-
-                                    <div
-                                        class="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-xl border border-pink-200 dark:border-pink-900">
-                                        <div class="text-center">
-                                            <h3
-                                                class="text-2xl md:text-3xl font-bold text-pink-600 dark:text-pink-400 mb-6">
-                                                Special Birthday Message for My Babydoll
-                                            </h3>
-
-                                            <div class="relative mb-8">
-                                                <img src="./love.png" alt="Birthday celebration inspiration"
-                                                    width="5760" height="3840"
-                                                    class="w-full h-64 md:h-80 object-cover rounded-xl shadow-md">
-                                                <div
-                                                    class="absolute bottom-3 right-3 text-xs text-white bg-black/50 px-2 py-1 rounded">
-                                                    Photo From My Heart
-                                                </div>
-                                            </div>
-
-                                            <p class="text-gray-700 dark:text-gray-300 text-lg mb-6 leading-relaxed">
-                                                On your special day, I want to remind you just how incredible you are.
-                                                Every moment spent with you is a treasure, and your love fills my heart
-                                                with more joy than words could ever express. You make life brighter with
-                                                your laughter, lighter with your kindness, and every day with you feels
-                                                like a gift.
-                                            </p>
-
-                                            <p class="text-gray-700 dark:text-gray-300 text-lg mb-8 leading-relaxed">
-                                                Happy birthday, my amazing Jaana. Thank you for being you, for bringing
-                                                light into my world, and for making every moment we share unforgettable.
-                                            </p>
-
-                                            <div class="text-pink-600 dark:text-pink-400 font-semibold text-xl">
-                                                Forever yours ❤️
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                     </section>
-                </div>
 
-            </element>
-            <element id="e2f22ea6-52a6-47f1-9e27-3fcf84fde26a" data-section-id="e2f22ea6-52a6-47f1-9e27-3fcf84fde26a">
-
-
-                <div id="root">
-                    <section id="gallery"
+                    <section id="gallery" data-reveal
                         class="py-5 bg-gradient-to-br from-pink-50 to-indigo-100 dark:from-neutral-900 dark:to-neutral-800">
                         <div class="container mx-auto px-4">
                             <!-- Gallery Grid -->
@@ -3082,203 +3049,33 @@
                                                 <div class="text-center p-6">
                                                     <div class="text-3xl mb-3">🎂</div>
                                                     <h3 class="text-xl font-bold text-pink-600 dark:text-pink-400 mb-2">
-                                                        Happy Birthday My Babydoll!</h3>
-                                                    <p class="text-gray-700 dark:text-gray-300">April 1st - Your Special
+                                                        Happy Birthday My Princess!</h3>
+                                                    <p class="text-gray-700 dark:text-gray-300">April 2nd - Your Special
                                                         Day</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="text-center text-gray-600 dark:text-gray-400 italic">A frame for the
+                                        <p class="mb-8 text-center text-gray-600 dark:text-gray-400 italic">A frame for
+                                            the
                                             birthday queen</p>
+                                        <div id="spotify-smash-target" class="spotify-smash-wrap my-auto backdrop-blur-sm shadow-xl border border-pink-200 dark:border-pink-900 rounded-2xl z-10">
+                                            <img class="w-full"
+                                                src="./img/spotify.png" alt="Spotify memory image">
+                                            <div id="spotify-crack" class="spotify-crack"></div>
+                                        </div>
+
+                                        <div class="mt-4 flex justify-center">
+                                            <button id="smash-spotify-btn"
+                                                class="inline-flex items-center justify-center px-5 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-600 text-white font-semibold shadow-md hover:from-red-600 hover:to-pink-700 transition duration-300">
+                                                Smash Me!
+                                            </button>
+                                        </div>
+
                                     </div>
 
                                     <!-- Special Message -->
-                                    <div
-                                        class="bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 rounded-xl shadow-xl p-6 flex items-center">
-                                        <div class="text-center w-full">
-                                            <h3 class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-4">For
-                                                MadamJI</h3>
-                                            <p class="text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
-                                                These images may be placeholders, but my feelings for you are real.
-                                                Looking forward to creating real memories with you, Jaana.
-                                            </p>
-                                            <button id="gallery-heart"
-                                                class="inline-flex items-center px-6 py-3 bg-pink-500 hover:bg-pink-600 dark:bg-pink-600 dark:hover:bg-pink-700 text-white rounded-full shadow-md transition duration-300 transform hover:scale-105">
-                                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                Send Love
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="text-center my-16">
-                                    <p class="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-                                        Imagining our beautiful memories together. Each frame represents a special
-                                        moment
-                                        with my Darling.
-                                    </p>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    <!-- Gallery Item 1 -->
-                                    <div
-                                        class="group relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-neutral-800 p-3 transform transition duration-300 hover:scale-105">
-                                        <div
-                                            class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden bg-pink-100 dark:bg-pink-900/30">
-                                            <div
-                                                class="flex items-center justify-center w-full h-full text-pink-500 dark:text-pink-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-80"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="1"
-                                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="pt-4 pb-2">
-                                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">First
-                                                Hello</h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">The day I first called
-                                                you MadamJI</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Gallery Item 2 -->
-                                    <div
-                                        class="group relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-neutral-800 p-3 transform transition duration-300 hover:scale-105">
-                                        <div
-                                            class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden bg-purple-100 dark:bg-purple-900/30">
-                                            <div
-                                                class="flex items-center justify-center w-full h-full text-purple-500 dark:text-purple-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-80"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="1"
-                                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="pt-4 pb-2">
-                                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Special
-                                                Moments</h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">When I realized Jaana
-                                                was special</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Gallery Item 3 -->
-                                    <div
-                                        class="group relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-neutral-800 p-3 transform transition duration-300 hover:scale-105">
-                                        <div
-                                            class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden bg-blue-100 dark:bg-blue-900/30">
-                                            <div
-                                                class="flex items-center justify-center w-full h-full text-blue-500 dark:text-blue-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-80"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="1"
-                                                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="pt-4 pb-2">
-                                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Our
-                                                Wishes</h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">Dreams shared with Baby
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Gallery Item 4 -->
-                                    <div
-                                        class="group relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-neutral-800 p-3 transform transition duration-300 hover:scale-105">
-                                        <div
-                                            class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden bg-yellow-100 dark:bg-yellow-900/30">
-                                            <div
-                                                class="flex items-center justify-center w-full h-full text-yellow-500 dark:text-yellow-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-80"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="1"
-                                                        d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="pt-4 pb-2">
-                                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Magic
-                                                Moments</h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">When time stood still
-                                                with Babygirl</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Gallery Item 5 -->
-                                    <div
-                                        class="group relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-neutral-800 p-3 transform transition duration-300 hover:scale-105">
-                                        <div
-                                            class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden bg-green-100 dark:bg-green-900/30">
-                                            <div
-                                                class="flex items-center justify-center w-full h-full text-green-500 dark:text-green-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-80"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="1"
-                                                        d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="pt-4 pb-2">
-                                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Last
-                                                Birthday</h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">Celebrating Your
-                                                Highness</p>
-                                        </div>
-                                    </div>
-
-                                    <!-- Gallery Item 6 -->
-                                    <div
-                                        class="group relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-neutral-800 p-3 transform transition duration-300 hover:scale-105">
-                                        <div
-                                            class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden bg-red-100 dark:bg-red-900/30">
-                                            <div
-                                                class="flex items-center justify-center w-full h-full text-red-500 dark:text-red-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 opacity-80"
-                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="1"
-                                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="pt-4 pb-2">
-                                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Bright
-                                                Ideas</h3>
-                                            <p class="text-sm text-gray-600 dark:text-gray-300">Plans made with Darling
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Coming Soon -->
-                                <div class="mt-16 text-center">
-                                    <div
-                                        class="inline-block bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm px-8 py-6 rounded-xl shadow-lg">
-                                        <h3 class="text-2xl text-pink-600 dark:text-pink-400 font-bold mb-4">Real Photos
-                                            Coming Soon</h3>
-                                        <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                            Let's create beautiful memories together that will fill this gallery, Baby.
-                                        </p>
-                                    </div>
+                                    <img class="backdrop-blur-sm shadow-xl border border-pink-200 dark:border-pink-900 rounded-2xl z-10"
+                                        src="./img/collage_2.png" alt="">
                                 </div>
                             </div>
                         </div>
@@ -3286,26 +3083,69 @@
 
                     <script>
                         // Gallery Heart Animation
-                        document.getElementById('gallery-heart').addEventListener('click', function () {
-                            // Create floating hearts
-                            createFloatingHearts();
+                        const galleryHeartButton = document.getElementById('gallery-heart');
 
-                            // Change button text temporarily
-                            const originalText = this.innerHTML;
-                            this.innerHTML = `
+                        if (galleryHeartButton) {
+                            galleryHeartButton.addEventListener('click', function () {
+                                // Create floating hearts
+                                createFloatingHearts();
+
+                                // Change button text temporarily
+                                const originalText = this.innerHTML;
+                                this.innerHTML = `
       <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
       </svg>
       Love Sent!
     `;
 
-                            setTimeout(() => {
-                                this.innerHTML = originalText;
-                            }, 2000);
-                        });
+                                setTimeout(() => {
+                                    this.innerHTML = originalText;
+                                }, 2000);
+                            });
+                        }
+
+                        const smashSpotifyBtn = document.getElementById('smash-spotify-btn');
+                        const spotifySmashTarget = document.getElementById('spotify-smash-target');
+                        const spotifyCrack = document.getElementById('spotify-crack');
+                        let smashCount = 0;
+
+                        function buildCrackBackground(lineCount) {
+                            const layers = [];
+
+                            for (let i = 0; i < lineCount; i++) {
+                                const angle = Math.floor(Math.random() * 180);
+                                const pivot = 24 + Math.random() * 52;
+                                const width = 0.5 + Math.random() * 1.6;
+                                const alpha = (0.45 + Math.random() * 0.45).toFixed(2);
+
+                                layers.push(
+                                    `linear-gradient(${angle}deg, transparent 0%, transparent ${pivot}%, rgba(255, 255, 255, ${alpha}) ${pivot + 0.2}%, transparent ${pivot + width}%)`
+                                );
+                            }
+
+                            return layers.join(',');
+                        }
+
+                        if (smashSpotifyBtn && spotifySmashTarget && spotifyCrack) {
+                            smashSpotifyBtn.addEventListener('click', function () {
+                                smashCount += 1;
+
+                                // Add more visible crack lines after every smash.
+                                const lineCount = 4 + smashCount;
+                                spotifyCrack.style.backgroundImage = buildCrackBackground(lineCount);
+
+                                // Re-trigger smash animation on every click, even in rapid succession.
+                                spotifySmashTarget.classList.remove('smashed');
+                                void spotifySmashTarget.offsetWidth;
+                                spotifySmashTarget.classList.add('smashed');
+                                this.textContent = `Smash More! (${smashCount})`;
+                            });
+                        }
 
                         function createFloatingHearts() {
                             const button = document.getElementById('gallery-heart');
+                            if (!button) return;
                             const buttonRect = button.getBoundingClientRect();
                             const heartCount = 10;
 
@@ -3334,6 +3174,21 @@
                                 }, 1000);
                             }
                         }
+
+                        // Reveal sections when they enter viewport
+                        const revealTargets = document.querySelectorAll('[data-reveal]');
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach((entry) => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add('show');
+                                }
+                            });
+                        }, { threshold: 0.15 });
+
+                        revealTargets.forEach((el) => {
+                            el.classList.add('reveal');
+                            observer.observe(el);
+                        });
                     </script>
                 </div>
 
